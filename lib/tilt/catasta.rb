@@ -19,7 +19,7 @@ module Tilt
     end
 
     def precompiled(locals)
-      result = @engine.go(data, "build/")
+      result = @engine.go(data, nil)
       assignments = "_params = locals"
       result = [assignments, result].join("\n")
       [result, 0]

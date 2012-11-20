@@ -24,45 +24,26 @@ begin
 
     test "passing locals" do
       template = Tilt::CatastaTemplate.new { <<-STR }
----
-doctype: html5
-parameters:
-  name: str
----
-target: Ruby
----
 Hey {{= name }}!
       STR
-      assert_equal "Hey Joe!", template.render(Object.new, :name => 'Joe')
+      assert_equal "Hey Joe!\n", template.render(Object.new, :name => 'Joe')
     end
 
-  #   test "evaluating in an object scope" do
-  #     template = Tilt::HamlTemplate.new { "%p= 'Hey ' + @name + '!'" }
-  #     scope = Object.new
-  #     scope.instance_variable_set :@name, 'Joe'
-  #     assert_equal "<p>Hey Joe!</p>\n", template.render(scope)
-  #   end
-
-  #   test "passing a block for yield" do
-  #     template = Tilt::HamlTemplate.new { "%p= 'Hey ' + yield + '!'" }
-  #     assert_equal "<p>Hey Joe!</p>\n", template.render { 'Joe' }
-  #   end
-
-  #   test "backtrace file and line reporting without locals" do
-  #     data = File.read(__FILE__).split("\n__END__\n").last
-  #     fail unless data[0] == ?%
-  #     template = Tilt::HamlTemplate.new('test.haml', 10) { data }
-  #     begin
-  #       template.render
-  #       fail 'should have raised an exception'
-  #     rescue => boom
-  #       assert_kind_of NameError, boom
-  #       line = boom.backtrace.grep(/^test\.haml:/).first
-  #       assert line, "Backtrace didn't contain test.haml"
-  #       file, line, meth = line.split(":")
-  #       assert_equal '12', line
-  #     end
-  #   end
+    test "backtrace file and line reporting without locals" do
+      data = File.read(__FILE__).split("\n__END__\n").last
+      fail("count: " + File.read(__FILE__).split("\n__END__\n").size.to_s) unless data[0] == "<"
+      template = Tilt::CatastaTemplate.new('test.cata', 10) { data }
+      begin
+        template.render
+        fail 'should have raised an exception'
+      rescue => boom
+        assert_kind_of NameError, boom
+        line = boom.backtrace.grep(/^test\.cata:/).first
+        assert line, "Backtrace didn't contain test.cata"
+        file, line, meth = line.split(":")
+        assert_equal '13', line
+      end
+    end
 
   #   test "backtrace file and line reporting with locals" do
   #     data = File.read(__FILE__).split("\n__END__\n").last
@@ -142,3 +123,14 @@ Hey {{= name }}!
 rescue LoadError => boom
   warn "Tilt::CatastaTemplate (disabled) #{boom}"
 end
+
+__END__
+<html>
+  <body>
+    <ol>
+    {{for i in list}}
+      <li>{{= i}}</li>
+    {{/for}}
+    </ol>
+  </body>
+</html>

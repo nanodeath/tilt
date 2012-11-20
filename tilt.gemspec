@@ -81,6 +81,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'RedCloth'
   s.add_development_dependency 'bluecloth'
   s.add_development_dependency 'builder'
+  s.add_development_dependency 'catasta'
   s.add_development_dependency 'coffee-script'
   s.add_development_dependency 'contest'
   s.add_development_dependency 'creole'
